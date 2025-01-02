@@ -1,6 +1,14 @@
+import { authModalState } from '@/states/atoms/AuthModalAtom';
 import React from 'react'
+import { useSetRecoilState } from 'recoil';
 
 const ResetPassword = () => {
+	const setAuthModalState = useSetRecoilState(authModalState);
+	
+		const handleButtonClick = (type : "login" | "register" | "forgotPassword") =>{
+			setAuthModalState((prev) => ({...prev, type}))
+		}
+
   return (
     <form className='space-y-6 px-6 pb-4' >
 			<h3 className='text-xl font-medium text-white'>Reset Password</h3>
@@ -28,6 +36,7 @@ const ResetPassword = () => {
 				className='w-full text-white focus:ring-blue-300 font-medium rounded-lg
                 text-sm px-5 py-2.5 text-center bg-brand-orange hover:bg-brand-orange-s
             '
+			onClick={()=> handleButtonClick("login")}
 			>
 				Log In
 			</button>

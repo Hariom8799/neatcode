@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Azeret_Mono as Geist_Mono } from 'next/font/google';
+import {  Azeret_Mono as Geist_Mono } from 'next/font/google';
 import "./globals.css";
-import ClientWrapper from "./ClientWrapper";
+import RecoilProvider from "@/components/RecoilProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+
+// const geistSans = Geist({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+// });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -26,11 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistMono.variable} antialiased`}
       >
-        <ClientWrapper>
+        <RecoilProvider>
           {children}
-        </ClientWrapper>
+        </RecoilProvider>
       </body>
     </html>
   );
