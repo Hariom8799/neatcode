@@ -1,22 +1,61 @@
+'use client';
+import { auth } from '@/firebase/firebase';
 import { authModalState } from '@/states/atoms/AuthModalAtom';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/navigation';
+
 
 const SignUp = () => {
 	const setAuthModalState = useSetRecoilState(authModalState);
+	const [inputs, setInputs] = React.useState({"email": "", "password": "", "name": ""})
+	const router = useRouter();
+	const [
+		createUserWithEmailAndPassword,
+		// user,
+		loading,
+		error,
+	  ] = useCreateUserWithEmailAndPassword(auth);
 
 	const handleButtonClick = (type : "login" | "register" | "forgotPassword") =>{
 		setAuthModalState((prev) => ({...prev, type}))
 	}
 
+
+	const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+		setInputs((prev)=> ({...prev, [e.target.name] : e.target.value}))
+		// console.log(process.env.NEXT_PUBLIC_FIREBASE_API_KEY)
+	}
+
+	const handleRegister = async (e : React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		if(!inputs.email || !inputs.password || !inputs.name) alert("Please fill in all fields")
+		try{
+			const newUser = await createUserWithEmailAndPassword(inputs.email, inputs.password)
+			if(!newUser)	return 
+			router.push('/')	
+		}
+		catch(e){
+			console.log(e)
+		}
+	}
+
+	useEffect(()=>{
+		if(error) {
+			console.log("Email already in use", error)
+		}
+	},[error])
+
   return (
-    <form className='space-y-6 px-6 pb-4' >
+    <form className='space-y-6 px-6 pb-4' onSubmit={handleRegister} >
 			<h3 className='text-xl font-medium text-white'>Register to LeetClone</h3>
 			<div>
 				<label htmlFor='email' className='text-sm font-medium block mb-2 text-gray-300'>
 					Your Email
 				</label>
 				<input
+					onChange={handleInputChange}
 					type='email'
 					name='email'
 					id='email'
@@ -32,6 +71,7 @@ const SignUp = () => {
 					Your Name 
 				</label>
 				<input
+					onChange={handleInputChange}
 					type='text'
 					name='name'
 					id='name'
@@ -47,6 +87,7 @@ const SignUp = () => {
 					Your Password
 				</label>
 				<input
+					onChange={handleInputChange}
 					
 					type='password'
 					name='password'
@@ -65,7 +106,7 @@ const SignUp = () => {
                 text-sm px-5 py-2.5 text-center bg-brand-orange hover:bg-brand-orange-s
             '
 			>
-				Register
+				{loading ? "Loading..." : "Register"}
 			</button>
 			
 			<div className='text-sm font-medium text-gray-300 text-center'>
