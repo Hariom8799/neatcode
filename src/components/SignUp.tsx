@@ -36,14 +36,14 @@ const SignUp = () => {
 			if(!newUser)	return 
 			router.push('/')	
 		}
-		catch(e){
-			console.log(e)
+		catch(err){
+			console.log(err)
 		}
 	}
 
 	useEffect(()=>{
 		if(error) {
-			console.log("Email already in use", error)
+			console.log("Email already in use",error)
 		}
 	},[error])
 
