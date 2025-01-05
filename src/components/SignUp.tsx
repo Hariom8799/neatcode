@@ -34,7 +34,7 @@ const SignUp = () => {
 		try{
 			const newUser = await createUserWithEmailAndPassword(inputs.email, inputs.password)
 			if(!newUser)	return 
-			router.push('/')	
+			router.push('/')
 		}
 		catch(err){
 			console.log(err)
