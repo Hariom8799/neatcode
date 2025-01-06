@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {  Azeret_Mono as Geist_Mono } from 'next/font/google';
 import "./globals.css";
 import RecoilProvider from "@/components/RecoilProvider";
+import { Toaster } from "react-hot-toast";
 
 
 // const geistSans = Geist({
@@ -32,6 +33,7 @@ export default function RootLayout({
         <RecoilProvider>
           {children}
         </RecoilProvider>
+        <Toaster/>
       </body>
     </html>
   );

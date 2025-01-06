@@ -2,13 +2,14 @@
 import { auth } from '@/firebase/firebase';
 import { authModalState } from '@/states/atoms/AuthModalAtom'
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import toast from 'react-hot-toast';
 import { useSetRecoilState } from 'recoil'
 
 const Login = () => {
 	const setAuthModalState = useSetRecoilState(authModalState);
-	const [signInWithEmailAndPassword,loading,error] = useSignInWithEmailAndPassword(auth);
+	const [signInWithEmailAndPassword,loading] = useSignInWithEmailAndPassword(auth);
 	const [credentials, setCredentials] = useState({email: "", password: ""})
 	const router = useRouter();
 
@@ -23,32 +24,29 @@ const Login = () => {
 
 	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if(!credentials.email || !credentials.password) return alert("Please fill in all fields")
+		if(!credentials.email || !credentials.password) return toast.error("Please fill in all fields")
 			const user = await signInWithEmailAndPassword(credentials.email, credentials.password);
 
 			if(!user){
-				return alert("Invalid credentials")
+				return toast.error("Invalid credentials")
+				
 			}
 
-			console.log("User logged in", user)	
+			toast.success("Login successfull")
 			router.push('/');
 		try {
 			
 		} catch (err) {
 			if (err instanceof Error) {
-				console.log(err.message);
+				toast.error(err.message);
+				// console.log(err.message);
 			} else {
-				console.log('An unknown error occurred');
+				// console.log('An unknown error occurred');
+				toast.error('An unknown error occurred');
+
 			}
 		}
 	}
-
-	useEffect(()=>{
-		console.log("user not logged in", error)
-	},[error])
-
-
-
 
   return (
     <form className='space-y-6 px-6 pb-4' onSubmit={handleLogin}>

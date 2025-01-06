@@ -1,10 +1,11 @@
 'use client';
 import { auth } from '@/firebase/firebase';
 import { authModalState } from '@/states/atoms/AuthModalAtom';
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSetRecoilState } from 'recoil';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 
 const SignUp = () => {
@@ -15,7 +16,7 @@ const SignUp = () => {
 		createUserWithEmailAndPassword,
 		// user,
 		loading,
-		error,
+		
 	  ] = useCreateUserWithEmailAndPassword(auth);
 
 	const handleButtonClick = (type : "login" | "register" | "forgotPassword") =>{
@@ -30,22 +31,18 @@ const SignUp = () => {
 
 	const handleRegister = async (e : React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		if(!inputs.email || !inputs.password || !inputs.name) alert("Please fill in all fields")
+		if(!inputs.email || !inputs.password || !inputs.name) return toast.error("Please fill in all fields")
 		try{
 			const newUser = await createUserWithEmailAndPassword(inputs.email, inputs.password)
 			if(!newUser)	return 
+			toast.success("Account created successfully")
 			router.push('/')
 		}
 		catch(err){
+			toast.error("An error occurred. Please try again later")
 			console.log(err)
 		}
 	}
-
-	useEffect(()=>{
-		if(error) {
-			console.log("Email already in use",error)
-		}
-	},[error])
 
   return (
     <form className='space-y-6 px-6 pb-4' onSubmit={handleRegister} >

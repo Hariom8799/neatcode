@@ -25,7 +25,7 @@ const ProblemTable = () => {
                             <BsCheck2Circle fontSize={'18'} width={"18"}/>
                         </th>
                         <td className='px-6 py-4 '>
-                            <Link href={`/problem/${doc.id}`} className="cursor-pointer hover:text-blue-600">${doc.title}</Link>
+                            <Link href={`/problems/${doc.id}`} className="cursor-pointer hover:text-blue-600">{doc.title}</Link>
                         </td>
                         <td className={`px-6 py-4 ${diffColor}`}>
                             {doc.difficulty}
